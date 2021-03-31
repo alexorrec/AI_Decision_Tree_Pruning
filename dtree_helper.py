@@ -52,7 +52,7 @@ def build_tree(df, attributes, target, parent=None):
 
     else:
         gain_values = []
-        for i in df.columns[:-1]:
+        for i in attributes:
             gain_values.append(information_gain(df, i, target))
 
         best_split_index = np.argmax(gain_values)
@@ -82,6 +82,7 @@ def predict(node, test):
             if attr == node.children[i][0]:
                 return predict(node.children[i][1], test)
             else:
+                #da implementare a seguito di pruning
                 pass
 
 
