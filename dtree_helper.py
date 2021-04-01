@@ -3,14 +3,14 @@ from collections import Counter
 import node as N
 
 
-def print_tree(node, level=0):
+def print_tree(node, level = 0):
     if node.answer != '':
-        print(' ' * level, node.answer)
+        print('\t'*level, node.answer)
         return
-    print('' * level, node.label)
+    print(' '*level, node.label)
     for value, n in node.children:
-        print('' * (level + 1), value)
-        print_tree(n, level + 2)
+        print(' '*(level+1), value)
+        print_tree(n, level+2)
 
 
 def get_entropy(df_target):
@@ -35,24 +35,29 @@ def plurality_value(examples):
 
 
 def build_tree(df, attributes, target, parent=None):
-    if len(set(df[target])) == 0:
-        node = N.Node('')
-        node.answer = plurality_value(parent)
-        return node
-
-    elif len(df) == 0:
+    if df.empty:
+        # print('2')
         node = N.Node('')
         node.answer = plurality_value(df[target])
         return node
 
-    elif len(np.unique(df[target])) <= 1:
+    # Questa è OK
+    elif len(np.unique(df[target])) <= 1:  # Tutti gli esempi sono uguali ritorna quella classificazione
+        # print('3')
         node = N.Node('')
         node.answer = np.unique(df[target])[0]
         return node
 
+    elif len(attributes) == 0:
+        # print('1')
+        node = N.Node('')
+        node.answer = plurality_value(parent)
+        return node
+
     else:
+        # calcolo il max gain: OK
         gain_values = []
-        for i in attributes:
+        for i in df.columns[:-1]:
             gain_values.append(information_gain(df, i, target))
 
         best_split_index = np.argmax(gain_values)
@@ -93,4 +98,4 @@ def accuracy(tree, tests, target):
         if predict(tree, tests[t]) == tests[t].get(target):
             no_of_correct_predictions += 1
 
-    return (no_of_correct_predictions / len(tests)), no_of_correct_predictions
+    return (no_of_correct_predictions / len(tests))
