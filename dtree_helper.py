@@ -36,26 +36,21 @@ def plurality_value(examples):
 
 def build_tree(df, attributes, target, parent=None):
     if df.empty:
-        # print('2')
         node = N.Node('')
         node.answer = plurality_value(df[target])
         return node
 
-    # Questa è OK
     elif len(np.unique(df[target])) <= 1:  # Tutti gli esempi sono uguali ritorna quella classificazione
-        # print('3')
         node = N.Node('')
         node.answer = np.unique(df[target])[0]
         return node
 
     elif len(attributes) == 0:
-        # print('1')
         node = N.Node('')
         node.answer = plurality_value(parent)
         return node
 
     else:
-        # calcolo il max gain: OK
         gain_values = []
         for i in df.columns[:-1]:
             gain_values.append(information_gain(df, i, target))
@@ -64,7 +59,6 @@ def build_tree(df, attributes, target, parent=None):
         best_split = df.columns[best_split_index]
         tree = N.Node(best_split)
 
-        # OK
         new_attributes = [i for i in attributes if i != best_split]
         new_parent = df[target]
 
@@ -92,10 +86,11 @@ def predict(node, test):
 
 
 def accuracy(tree, tests, target):
-    no_of_correct_predictions = 0
 
-    for t in range(len(tests)):
-        if predict(tree, tests[t]) == tests[t].get(target):
-            no_of_correct_predictions += 1
+    n_good_predicts = 0
 
-    return (no_of_correct_predictions / len(tests))
+    for i in range(len(tests)):
+        if predict(tree, tests.iloc[i]) == tests[target][i]:
+            n_good_predicts += 1
+
+    return n_good_predicts/len(tests)
