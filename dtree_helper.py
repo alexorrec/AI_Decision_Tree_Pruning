@@ -3,6 +3,17 @@ from collections import Counter
 import node as N
 
 
+# 70% per training, 15% per testing, 15% per validation
+def split_df(df):
+    n = round(len(df) * 70 / 100)
+    n_ = round(len(df) * 15 / 100)
+    train_set = df[0: n - 1].reset_index(drop=True)
+    test_set = df[n: n + n_ - 1].reset_index(drop=True)
+    val_set = df[n + n_ :].reset_index(drop=True)
+
+    return train_set, test_set, val_set
+
+
 def print_tree(node, level=0):
     if node.answer != '':
         print('\t' * level, node.answer)
@@ -15,13 +26,12 @@ def print_tree(node, level=0):
 
 
 def get_entropy(df_target):
-    values, counts = np.unique(df_target, return_counts=True)
-
+    counts = Counter(df_target)
     entropy = 0
-    for i in range(len(values)):
-        entropy += (-counts[i]/np.sum(counts)) * np.log2(counts[i]/np.sum(counts))
-    # entropy = np.sum([(-counts[i] / np.sum(counts)) * np.log2(counts[i] / np.sum(counts)) for i in range(len(values))])
-    return entropy
+
+    for i in counts.items():
+        entropy += i[1] / len(df_target) * np.log2(i[1] / len(df_target))
+    return -entropy
 
 
 def information_gain(df, column, target):
@@ -56,7 +66,7 @@ def build_tree(df, attributes, target, parent=None):
         node.answer = plurality_value(df[target])
         return node
 
-    elif len(np.unique(df[target])) <= 1:  # Tutti gli esempi sono uguali ritorna quella classificazione
+    elif len(np.unique(df[target])) <= 1:
         node = N.Node('')
         node.is_leaf = True
         node.answer = np.unique(df[target])[0]
