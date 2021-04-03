@@ -1,7 +1,6 @@
 import dtree_helper as dtree
 import pandas as pd
 
-# DF_ 70% - TRAINING SET, 15% - TEST SET, 15% - VALIDATION SET
 # Mushroom dataset
 '''
 df = pd.read_csv('./datasets/mushy_data.csv', sep=';')
@@ -15,8 +14,9 @@ df.columns = ['cap-shape', 'cap-surface', 'cap-color', 'bruises', 'odor', 'gill-
 df = pd.read_csv('./datasets/nursery.csv')
 df.columns = ['parents', 'has_nurs', 'form', 'children', 'housing', 'finance', 'social', 'health', 'class']
 
-
+# Randomizzo le righe, in alcuni sets sono ordinate per un qualche attributo
 df = df.sample(frac=1, random_state=42).reset_index(drop=True)
+
 # MAIN
 train_set, test_set, val_set = dtree.split_df(df)
 

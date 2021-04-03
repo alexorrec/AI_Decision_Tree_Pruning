@@ -25,12 +25,12 @@ def print_tree(node, level=0):
         print_tree(n, level + 2)
 
 
-def get_entropy(df_target):
-    counts = Counter(df_target)
-    entropy = 0
+def get_entropy(column):
+    counts = Counter(column)
 
+    entropy = 0
     for i in counts.items():
-        entropy += i[1] / len(df_target) * np.log2(i[1] / len(df_target))
+        entropy += i[1]/len(column)*np.log2(i[1]/len(column))
     return -entropy
 
 
@@ -40,7 +40,7 @@ def information_gain(df, column, target):
 
     ent_ = 0
     for i in range(len(values)):
-        ent_ += counts[i] / np.sum(counts) * get_entropy(df.where(df[column] == values[i]).dropna()[target])
+        ent_ += counts[i]/np.sum(counts)*get_entropy(df.where(df[column] == values[i]).dropna()[target])
     return target_ent - ent_
 
 
