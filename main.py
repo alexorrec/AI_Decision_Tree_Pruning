@@ -16,6 +16,7 @@ df.columns = ['parents', 'has_nurs', 'form', 'children', 'housing', 'finance', '
 
 # Randomizzo le righe, in alcuni sets sono ordinate per un qualche attributo
 df = df.sample(frac=1, random_state=42).reset_index(drop=True)
+# print(df)
 
 # MAIN
 train_set, test_set, val_set = dtree.split_df(df)

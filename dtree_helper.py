@@ -95,7 +95,7 @@ def build_tree(df, attributes, target, parent=None):
 
 
 def predict(node, test):
-    if len(node.children) == 0 or node.is_pruned:
+    if node.is_leaf or node.is_pruned:
         return node.answer
     else:
         attr = test[node.label]
