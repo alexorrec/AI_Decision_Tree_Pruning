@@ -3,13 +3,22 @@ from collections import Counter
 import node as N
 
 
+def node_measure(node):
+    temp = 0
+    if not node.is_pruned:
+        temp += len(node.children)
+    for value, child in node.children:
+        temp += node_measure(child)
+    return temp
+
+
 # 70% per training, 15% per testing, 15% per validation
 def split_df(df):
     n = round(len(df) * 70 / 100)
     n_ = round(len(df) * 15 / 100)
     train_set = df[0: n - 1].reset_index(drop=True)
     test_set = df[n: n + n_ - 1].reset_index(drop=True)
-    val_set = df[n + n_ :].reset_index(drop=True)
+    val_set = df[n + n_:].reset_index(drop=True)
 
     return train_set, test_set, val_set
 
@@ -30,7 +39,7 @@ def get_entropy(column):
 
     entropy = 0
     for i in counts.items():
-        entropy += i[1]/len(column)*np.log2(i[1]/len(column))
+        entropy += i[1] / len(column) * np.log2(i[1] / len(column))
     return -entropy
 
 
@@ -40,7 +49,7 @@ def information_gain(df, column, target):
 
     ent_ = 0
     for i in range(len(values)):
-        ent_ += counts[i]/np.sum(counts)*get_entropy(df.where(df[column] == values[i]).dropna()[target])
+        ent_ += counts[i] / np.sum(counts) * get_entropy(df.where(df[column] == values[i]).dropna()[target])
     return target_ent - ent_
 
 

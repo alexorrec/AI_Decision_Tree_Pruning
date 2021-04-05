@@ -16,7 +16,7 @@ df.columns = ['parents', 'has_nurs', 'form', 'children', 'housing', 'finance', '
 
 # Randomizzo le righe, in alcuni sets sono ordinate per un qualche attributo
 df = df.sample(frac=1, random_state=42).reset_index(drop=True)
-# print(df)
+print(df)
 
 # MAIN
 train_set, test_set, val_set = dtree.split_df(df)
@@ -30,8 +30,9 @@ tree = dtree.build_tree(train_set, attributes, target)
 tree.is_root = True
 tree.is_internal = False
 
-# dtree.print_tree(tree)
-
+#dtree.print_tree(tree)
+lenght = dtree.node_measure(tree)
+print(f'Quantitativo di nodi pre_pruning: {lenght}')
 accuracy = dtree.accuracy(tree, test_set, target)
 print(f'Accuracy prima del pruning: {accuracy}')
 
@@ -40,7 +41,8 @@ print()
 print('Inizio il pruning...')
 dtree.prune(tree, tree, val_set, target)
 
-# dtree.print_tree(tree)
-
+#dtree.print_tree(tree)
+lenght = dtree.node_measure(tree)
+print(f'Quantitativo di nodi pre_pruning: {lenght}')
 accuracy_post = dtree.accuracy(tree, test_set, target)
 print(f'Accuracy dopo pruning: {accuracy_post}')
