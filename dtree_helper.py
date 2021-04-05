@@ -3,13 +3,14 @@ from collections import Counter
 import node as N
 
 
+# Misura della quantità dei nodi
 def node_measure(node):
-    temp = 0
+    tmp = 0
     if not node.is_pruned:
-        temp += len(node.children)
+        tmp += len(node.children)
     for value, child in node.children:
-        temp += node_measure(child)
-    return temp
+        tmp += node_measure(child)
+    return tmp
 
 
 # 70% per training, 15% per testing, 15% per validation
@@ -23,6 +24,7 @@ def split_df(df):
     return train_set, test_set, val_set
 
 
+# Stampa l'albero
 def print_tree(node, level=0):
     if node.answer != '':
         print('\t' * level, node.answer)
@@ -34,6 +36,7 @@ def print_tree(node, level=0):
         print_tree(n, level + 2)
 
 
+# Calcolo dell'entropia di una data lista
 def get_entropy(column):
     counts = Counter(column)
 
@@ -43,6 +46,7 @@ def get_entropy(column):
     return -entropy
 
 
+# Calcolo dell'Information Gain
 def information_gain(df, column, target):
     target_ent = get_entropy(df[target])
     values, counts = np.unique(df[column], return_counts=True)
@@ -53,10 +57,12 @@ def information_gain(df, column, target):
     return target_ent - ent_
 
 
+# Ritorna il valore più comune di una data lista
 def plurality_value(examples):
     return Counter(examples).most_common(1)[0][0]
 
 
+# Calcolo il gain di ogni attributo, restituisco quello che apporta il maggior gain
 def importance(df, target):
     gain_values = []
     for i in df.columns[:-1]:
@@ -68,6 +74,7 @@ def importance(df, target):
     return best_split
 
 
+# Training dell'albero
 def build_tree(df, attributes, target, parent=None):
     if df.empty:
         node = N.Node('')
@@ -103,6 +110,7 @@ def build_tree(df, attributes, target, parent=None):
         return tree
 
 
+# Controllo della predizione, scorrendo i nodi dell'albero
 def predict(node, test):
     if node.is_leaf or node.is_pruned:
         return node.answer
@@ -113,6 +121,7 @@ def predict(node, test):
                 return predict(node.children[i][1], test)
 
 
+# Controllo della veridicità della Predizione
 def accuracy(tree, tests, target):
     n_good_predicts = 0
     for i in range(len(tests)):
@@ -121,6 +130,7 @@ def accuracy(tree, tests, target):
     return n_good_predicts / len(tests)
 
 
+# Pruning
 def prune(node, tree, val_set, target, modal=[]):
     if not node.is_leaf:
         for i in range(len(node.children)):

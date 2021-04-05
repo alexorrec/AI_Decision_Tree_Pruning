@@ -22,12 +22,11 @@ ISTRUZIONI PER L'USO:
 				- accuracy(tree, tests, target): calcolo la percentuale di successo relativa al test_set
 				- prune(node, tree, val_set, target, modal=[]): (Post_Pruning) sviluppata seguendo quanto descritto su Mitchell 1997, ogni nodo è candidato al pruning, esso sarà tagliato sse 
 									      l'accuracy che apporta tale sostituzione è maggiore o uguale a quella senza tale modifica.
+		        - node_measure(node): conteggia i nodi dell'albero, utile per capire le dimensioni di esso prima/dopo il pruning.
 	
 	- main.py: al suo interno sono caricati 2 Datasets: Mushroom & Nursery, se si vuole switchare tra l'uno e l'altro, basta de-commentare e commentare l'uno o l'altro.
 		   I risultati ottenuti da entrambi sono descritti nella relazione in .pdf. 
 		   Sono state inoltre commentate le funzioni di stampa, essendo esse approssimative, seppur può essere utile visualizzare entrambi gli alberi.
-
-- Un Notebook Jupyter, nel quale ho testato la funzione di prune su un piccolo df, forzando alcuni parametri. NB: cambiare il percorso del dtree_helper.py all'interno del file Jupyter
 
 - La cartella contenente i datasets reperiti sul sito: https://archive.ics.uci.edu/ml/datasets.php
 
