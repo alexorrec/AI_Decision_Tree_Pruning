@@ -2,7 +2,7 @@ import dtree_helper as dtree
 import pandas as pd
 
 # Mushroom dataset
-
+'''
 df = pd.read_csv('./datasets/mushy_data.csv', sep=';')
 df.columns = ['cap-shape', 'cap-surface', 'cap-color', 'bruises', 'odor', 'gill-attachment',
               'gill-spacing', 'gill-size', 'gill-color', 'stalk-shape', 'stalk-root', 'stalk-surface-above-ring',
@@ -13,7 +13,8 @@ df.columns = ['cap-shape', 'cap-surface', 'cap-color', 'bruises', 'odor', 'gill-
 # Nursery Dataset
 df = pd.read_csv('./datasets/nursery.csv')
 df.columns = ['parents', 'has_nurs', 'form', 'children', 'housing', 'finance', 'social', 'health', 'class']
-'''
+
+
 # Randomizzo le righe, in alcuni sets sono ordinate per un qualche attributo
 df = df.sample(frac=1, random_state=42).reset_index(drop=True)
 print(df)
@@ -41,6 +42,7 @@ print(f'Accuracy prima del pruning: {accuracy}')
 
 print()
 
+# Pruning
 print('Inizio il pruning...')
 dtree.prune(tree, tree, val_set, target)
 
